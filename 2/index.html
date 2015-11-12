@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="jquery.js"></script>
+<script src="underscore.js"></script>
+<script src="backbone.js"></script>
+<link href="http://cdn.bootcss.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+<script type="text/jscript">
+$(function() {
+   /* var Gist = Backbone.Model.extend(),
+    Gists = Backbone.Collection.extend({
+      model: Gist,
+      url: 'https://api.github.com/gists/public',
+      parse: function (response) {
+        return response;
+      }
+    }),
+    gists = new Gists();
+ 
+   var GistRow = Backbone.View.extend({
+    tagName: 'tr',
+    render: function (model) {
+      this.el.id = model.cid;
+      this.el.innerHTML = '<td>' + model.get('description') + '</td><td>'+ model.get('url') + '</td><td>' + model.get('created_at') + '</td><td><a href="javascript:void(0)" class="js-remove">X</a> <a href="javascript:void(0)" class="js-edit">E</a>&nbsp;</td>'
+      return this;
+    }
+  });*/
+
+
+
+
+
+
+ var Gist = Backbone.Model.extend()
+ var Gists = Backbone.Collection.extend({
+    model: Gist,
+    url : 'https://api.github.com/gists/public',
+    parse : function(response){
+        return response
+    }
+ })
+ var  gists = new Gists()
+
+  var GistRow = Backbone.View.extend({
+     tagName: 'tr',
+     render : function(model){
+        this.el.id = model.cid;
+        this.el.innerHTML = '<td>' + model.get('description') + '</td><td>'+ model.get('url') + '</td><td>' + model.get('created_at') + '</td><td><a href="javascript:void(0)" class="js-remove">X</a> <a href="javascript:void(0)" class="js-edit">E</a>&nbsp;</td>'
+        return this;
+     }
+  })
+  // var GistsView = Backbone.View.extend({
+  //   el: 'tbody',
+  //   collection: gists,
+  //   events: {
+  //     'click a.js-remove': function (e) {
+  //       var cid = e.currentTarget.parentElement.parentElement.id;
+  //       gists.get(cid).destroy();
+  //       gists.remove(cid);
+  //     },
+  //     'click a.js-edit': 'editRow',
+  //     'blur td[contenteditable]': 'saveRow'
+  //   },
+  //   editRow: function (e) {
+  //     var tr = e.currentTarget.parentElement.parentElement,
+  //       i = 0;
+ 
+  //     while (i < 3) {
+  //       tr.children[i].setAttribute('contenteditable', true);
+  //       i++;
+  //     }
+  //   },
+  //   saveRow: function (e) {
+  //     var tr = e.currentTarget.parentElement,
+  //       model = gists.get(tr.id);
+ 
+  //     model.set({
+  //       'description' : tr.children[0].innerText,
+  //       'url': tr.children[1].innerText,
+  //       'created_at': tr.children[2].innerText
+  //     });
+  //     model.save();
+  //   },
+  //   initialize: function () {
+  //     var self = this;
+  //     _.forEach(['reset', 'remove'], function (e) {
+  //       self.listenTo(self.collection, e, self.render);
+  //     });
+  //   },
+  //   render: function () {
+  //     var html = '';
+  //     _.forEach(this.collection.models, function (model) {
+  //       var tr = new GistRow();
+  //       html += tr.render(model).el.outerHTML;
+  //     });
+  //     this.el.innerHTML = html;
+  //     console.log(this.collection.toJSON()[0].description)
+  //     return this;
+  //   }
+  // });
+  // var gistsView = new GistsView();
+  // gists.fetch({reset: true});
+
+
+
+  var GistsView = Backbone.View.extend({
+     el: 'tbody',
+     collection: gists,
+     initialize: function(){
+        var self = this;
+        _.forEach(['reset','destroy'],function(e){
+            self.listenTo(self.collection,e,self.render)
+        })
+     },
+     render : function(){
+        var self = this, html='';
+        _.forEach(this.collection.models,function(model){
+            var tr = new GistRow()
+            html += tr.render(model).el.outerHTML
+        })
+        this.el.innerHTML = html
+     }
+  })
+  var gistsView = new GistsView()
+  gists.fetch({reset: true})
+ });
+
+</script>
+<title>backbone</title>
+</head>
+
+<body>
+<table id="js-id-gists" class="table">
+    <thead><th>description</th><th>URL</th><th>created_at</th><th></th></thead>
+    <tbody></tbody>
+  </table>
+</body>
+</html>
